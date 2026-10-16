@@ -3,4 +3,6 @@ opencv-python>=4.8.0
 mediapipe>=0.10.0
 numpy>=1.23.0
 ai-edge-litert>=2.3.0
-
+streamlit>=1.30.0
+pandas>=2.0.0
+protobuf>=4.25.3,<5.0.0

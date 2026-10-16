@@ -114,7 +114,15 @@ python vinmec_fall_demo.py 20240912_101331.mp4
 run_demo.bat 20240912_101331.mp4
 ```
 
-### Cách 3: Giao diện đồ họa Launcher UI
+### Cách 3: Giao diện Web Streamlit Đẳng cấp & Chỉn chu (Khuyên dùng)
+```bash
+streamlit run app_streamlit.py
+# Hoặc nhấp đúp file batch:
+run_streamlit.bat
+```
+*(Giao diện Streamlit cung cấp đầy đủ Video trực tiếp, biểu đồ thời gian thực, bảng Telemetry, điều chỉnh tham số động và tài liệu kiến trúc y tế).*
+
+### Cách 4: Giao diện đồ họa Desktop Launcher UI
 ```bash
 python vinmec_demo_app.py
 # Hoặc chạy file batch:

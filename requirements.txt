@@ -1,0 +1,6 @@
+# VinMec AI Medical Hub - Requirements (Plan A Updated)
+opencv-python>=4.8.0
+mediapipe>=0.10.0
+numpy>=1.23.0
+ai-edge-litert>=2.3.0
+

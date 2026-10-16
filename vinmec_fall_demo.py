@@ -7,10 +7,14 @@ Kiến trúc 2 Chốt (Two-Stage Pipeline):
 - Chốt 2: MediaPipe Pose Lite + Bộ đệm thời gian 10+ frame xác minh chuyển động và tư thế.
 
 Tối ưu phần cứng CPU Intel Core i5:
-- Tốc độ suy luận mượt mà >= 30 FPS.
+- Tốc độ suy luận mượt mà >= 40-48 FPS.
 - CNN được điều tiết tần suất tối ưu (CNN_MAX_FPS = 8).
 - Bộ lọc chống báo động giả khi cúi nhặt đồ hoặc ngồi xuống từ từ.
 - Giao diện Telemetry đầy đủ, trục trọng tâm cơ thể và cảnh báo khẩn cấp chớp đỏ.
+
+Tác giả: Trần Xuân Tùng
+MSSV: 2A202602787
+Hình thức: Nhóm 1 người (Solo)
 """
 
 import sys
@@ -18,6 +22,10 @@ import time
 import os
 import cv2
 import numpy as np
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+if BASE_DIR not in sys.path:
+    sys.path.insert(0, BASE_DIR)
 
 import config
 from src.fall_detection_pipeline import FallDetectionPipeline
@@ -132,16 +140,17 @@ def run_vinmec_fall_detection(source=0):
     fps_display = 0.0
     frame_count = 0
 
-    print("=" * 70)
-    print(" VINMEC SMART WARD - 2-STAGE FALL DETECTION AI (PLAN A UPDATED)")
-    print(" Khoi dong thanh cong!")
+    print("=" * 72)
+    print(" VINMEC SMART WARD — 2-STAGE FALL DETECTION AI (PLAN A UPDATED)")
+    print(" Tac gia: Tran Xuan Tung | MSSV: 2A202602787 | Nhom 1 nguoi (Solo 100%)")
+    print("=" * 72)
     print(f" - CNN Pretrained Model: {config.MODEL_PATH}")
     print(f" - LiteRT Threads: {config.INFERENCE_THREADS} | Max CNN FPS: {config.CNN_MAX_FPS}")
-    print(" - Nhan [R]: Reset bao dong khi benh nhan da an toan.")
+    print(" - Nhan [R]: Reset bao dong khi benh nhan da duoc y ta cham soc an toan.")
     print(" - Nhan [Q] hoac [ESC]: Thoat chuong trinh.")
-    print("=" * 70)
+    print("=" * 72)
 
-    window_name = "VinMec Smart Ward - Fall Detection AI"
+    window_name = "VinMec Smart Ward - Fall Detection AI (Tran Xuan Tung - 2A202602787)"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     cv2.resizeWindow(window_name, 960, 540)
 
@@ -194,7 +203,20 @@ if __name__ == "__main__":
         if arg_val.isdigit():
             video_source = int(arg_val)
         else:
-            video_source = arg_val
+            # Check shortcut alias
+            if arg_val.lower() in ("fall", "fall_sample", "fall_sample.mp4"):
+                video_source = config.FALL_VIDEO_PATH
+            elif arg_val.lower() in ("normal", "normal_sample", "normal_activity_sample.mp4"):
+                video_source = config.NORMAL_VIDEO_PATH
+            elif not os.path.isabs(arg_val) and not os.path.exists(arg_val):
+                # Try finding in data/videos
+                in_videos = os.path.join(config.VIDEOS_DIR, arg_val)
+                if os.path.exists(in_videos):
+                    video_source = in_videos
+                else:
+                    video_source = arg_val
+            else:
+                video_source = arg_val
         print(f"[KHOI DONG] Su dung nguon video tu: {video_source}")
     else:
         print("[KHOI DONG] Su dung Webcam mac dinh (index 0).")

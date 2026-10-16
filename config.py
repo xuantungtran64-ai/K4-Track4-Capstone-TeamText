@@ -1,15 +1,33 @@
 """
 Cấu hình hệ thống VinMec Fall Detection (Plan A Updated)
 Tất cả các ngưỡng vật lý, tham số mô hình và cấu hình runtime đều được khai báo tại đây.
+Tác giả: Trần Xuân Tùng - MSSV: 2A202602787
 """
 
 import os
 
-# Đường dẫn mô hình
+# Đường dẫn thư mục gốc và dữ liệu
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "models")
 MODEL_PATH = os.path.join(MODELS_DIR, "fall_detection_model.tflite")
 MODEL_URL = "https://huggingface.co/Siddhartha276/Fall_Detection/resolve/main/fall_detection_model.tflite"
+
+DATA_DIR = os.path.join(BASE_DIR, "data")
+VIDEOS_DIR = os.path.join(DATA_DIR, "videos")
+
+# Đường dẫn video mẫu chuẩn
+FALL_VIDEO_PATH = os.path.join(VIDEOS_DIR, "fall_sample.mp4")
+if not os.path.exists(FALL_VIDEO_PATH):
+    # Fallback to root if needed
+    alt_fall = os.path.join(BASE_DIR, "20240912_101331.mp4")
+    if os.path.exists(alt_fall):
+        FALL_VIDEO_PATH = alt_fall
+
+NORMAL_VIDEO_PATH = os.path.join(VIDEOS_DIR, "normal_activity_sample.mp4")
+if not os.path.exists(NORMAL_VIDEO_PATH):
+    alt_norm = os.path.join(BASE_DIR, "B_D_0002.mp4")
+    if os.path.exists(alt_norm):
+        NORMAL_VIDEO_PATH = alt_norm
 
 # Cấu hình Chốt 1: CNN Classifier (TFLite / LiteRT)
 CNN_MAX_FPS = 8.0               # Giới hạn tần suất gọi CNN trên CPU (khởi điểm 8 FPS)
@@ -37,4 +55,3 @@ SCALE_INFER_WIDTH = 320         # Thu nhỏ frame suy luận Pose để đạt >
 # Cấu hình Camera & Video
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
-
